@@ -49,9 +49,13 @@ def home():
         with Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename)) as img:
             watermark_text = request.form['watermark_text']
 
+            txt = Image.new("RGBA", img.size, (255, 255, 255, 0))
+
             # Draw image object and set font size
-            draw = ImageDraw.Draw(img)
-            font = ImageFont.truetype("arial.ttf", 36)
+            draw = ImageDraw.Draw(txt)
+            font_size = int(img.height / 10)
+
+            font = ImageFont.truetype("arial.ttf", font_size)
 
             # Calculate text size and position
             textbbox = draw.textbbox((0, 0), watermark_text, font)
@@ -64,12 +68,15 @@ def home():
             y = 0
             while y < img.height:
                 x = img.width - text_width - 10
-                draw.text((x, y), watermark_text, font=font, fill=(50, 50, 50, 50))
+                draw.text((x, y), watermark_text, font=font, fill=(255, 255, 255, 100))
                 y += text_height + 10
 
+            img = img.convert("RGBA")
+
             # Save to file
+            out = Image.alpha_composite(img, txt)
             watermarked_filename = 'watermarked_' + filename
-            img.save(os.path.join(app.config['UPLOAD_FOLDER'], watermarked_filename))
+            out.save(os.path.join(app.config['UPLOAD_FOLDER'], watermarked_filename), format='PNG')
 
         return redirect(url_for('download_file', img_name=watermarked_filename))
 
@@ -89,6 +96,6 @@ def uploaded_file(filename):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=80)
+    app.run(debug=True, port=80, host="0.0.0.0")
 
 
