@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <p>Download your watermarked image here.</p>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <p>
+   {% if img_name %}
+        <p><a href="{{ url_for('uploaded_file', filename=img_name) }}">Download watermarked image</a></p>
+        <p><img src="{{ url_for('uploaded_file', filename=img_name) }}" alt="{{ img_name }}"></p>
+    {% endif %}
+    </p>
+</div>
+
+{% endblock %}

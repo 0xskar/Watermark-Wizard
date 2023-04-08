@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <p>Welcome to Watermark Wizard. Upload an image below to apply a watermark.</p>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <p>
+        <form method="post" enctype="multipart/form-data">
+        <div>
+            Text for watermark: <input type="text" name="watermark_text" label="Watermark Text">
+        </div>
+        <div>
+        <input type="file" name="file">
+        <input type="submit" value="Upload">
+        </div>
+        </form>
+    </p>
+</div>
+
+{% endblock %}
